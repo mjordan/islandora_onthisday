@@ -1,0 +1,8 @@
+name = Islandora On This Day
+description = "Retrieves objects with a date value equal to the current day's date."
+package = Islandora Tools
+version = 7.x-dev
+core = 7.x
+dependencies[] = islandora
+dependencies[] = islandora_solr
+files[] = includes/utilities.inc
