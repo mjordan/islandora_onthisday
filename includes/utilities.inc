@@ -24,8 +24,6 @@ function islandora_onthisday_query_solr($query) {
   $query_processor->solrLimit = '1000000';
   $query_processor->executeQuery(FALSE);
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {
-    drush_log(dt('!num matching objects found.',
-      array('!num' => $query_processor->islandoraSolrResult['response']['numFound'])), 'ok');
     foreach ($query_processor->islandoraSolrResult['response']['objects'] as $object) {
       $pids[] = $object['solr_doc']['PID'];
     }

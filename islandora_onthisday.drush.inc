@@ -56,6 +56,8 @@ function drush_islandora_onthisday_get_pids() {
       dt('Sorry, no PIDS were found.'));
   }
   else {
+    drush_log(dt('!num matching objects found.',
+      array('!num' => count($pids))), 'ok');
     foreach ($pids as $pid) {
       drush_print($pid);
     }
