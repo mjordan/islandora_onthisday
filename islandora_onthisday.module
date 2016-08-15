@@ -47,9 +47,15 @@ function islandora_onthisday_admin_settings() {
     '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space the field name and asc or desc). You must use a field that is not multivalued."),
     '#maxlength' => 255,
   );
+  $form['islandora_onthisday_cache_data'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Cache list of daily objects'),
+    '#default_value' => variable_get('islandora_onthisday_cache_data', 0),
+    '#description' => t('May improve performance on large or busy sites. Old daily caches are cleared by Drupal cron.'),
+  );
   $form['islandora_onthisday_test_dates_enable'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable adding test dates in URL, e.g., /onthisday/12-31.'),
+    '#title' => t('Enable adding test dates in URL, e.g., /onthisday/02-26.'),
     '#default_value' => variable_get('islandora_onthisday_test_dates_enable', 0),
     '#description' => t('For testing purposes only. Disable in production. Test date must be in mm-dd format.'),
   );
@@ -76,13 +82,10 @@ function islandora_onthisday_theme() {
 
 /**
  * Implements hook_cron().
- *
- * Currently not used; placeholder for when caching is available.
  */
-function _islandora_onthisday_cron() {
-  // Get the PIDs from the Solr query.
+function islandora_onthisday_cron() {
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
-  islandora_onthisday_get_objects();
+  islandora_onthisday_clear_cache();
 }
 
 /**

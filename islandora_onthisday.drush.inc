@@ -23,6 +23,14 @@ function islandora_onthisday_drush_command() {
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
+  $items['islandora_onthisday_clear_cache'] = array(
+    'aliases' => array('iotdcc'),
+    'description' => "Clear out stale daily caches of 'on this day' data. Does not clear out today's cache.",
+    'examples' => array(
+      'drush islandora_onthisday_clear_cache',
+    ),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
+  );
 
   return $items;
 }
@@ -45,7 +53,6 @@ function drush_islandora_onthisday_get_objects() {
     $date = NULL;
   }
 
-  // Currently not used; placeholder for when caching is available.
   $results = islandora_onthisday_get_objects($date);
 
   if (!count($results) || !$results) {
@@ -59,4 +66,13 @@ function drush_islandora_onthisday_get_objects() {
       drush_print($properties['pid']);
     }
   }
+}
+
+/**
+ * Clears the stale data cached by this module.
+ */
+function drush_islandora_onthisday_clear_cache() {
+  module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+  islandora_onthisday_clear_cache();
+  drush_log(dt('Islandora On This Day cache cleared.', array()), 'ok');
 }

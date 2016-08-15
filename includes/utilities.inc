@@ -15,6 +15,13 @@
  *   An array containing all of the PIDs matching $query.
  */
 function islandora_onthisday_get_objects($date = FALSE) {
+  if (variable_get('islandora_onthisday_cache_data', 0)) {
+    $todays_cache_cid = 'islandora_onthisday:' . date("Y-m-d");
+    if ($cached = cache_get($todays_cache_cid)) {
+      return $cached->data;
+    }
+  }
+
   // Build the Solr query.
   if (!$date) {
     // Get today's month and day.
@@ -38,8 +45,15 @@ function islandora_onthisday_get_objects($date = FALSE) {
   // Get the object data from the Solr query.
   $objects = islandora_onthisday_query_solr($query);
 
-  // When caching is available, this function will rebuild the cache
-  // from cron or via the drush script.
+  if (variable_get('islandora_onthisday_cache_data', 0)) {
+    if (!$cached = cache_get($todays_cache_cid)) {
+      // It makes more sense to make this cache CACHE_TEMPORARY, but
+      // it looks like cron clears all the CACHE_TEMPORARY caches. So
+      // if we don't make it permanent, *today's* wiped out, which
+      // we don't want.
+      cache_set($todays_cache_cid, $objects, 'cache', CACHE_PERMANENT);
+    }
+  }
   return $objects;
 }
 
@@ -109,5 +123,29 @@ function islandora_onthisday_get_random_object() {
   }
   else {
     return FALSE;
+  }
+}
+
+/**
+ * Clear stale days' worth of data from the cache table.
+ *
+ * We don't use cache_clear_all() since we don't want to
+ * clear today's cache until tomorrow.
+ */
+function islandora_onthisday_clear_cache() {
+  if (!variable_get('islandora_onthisday_cache_data', 0)) {
+    return;
+  }
+  // First, get all the rows in the cache table whose cid starts with
+  // 'islandora_onthisday:'.
+  $result = db_query("SELECT cid FROM {cache} WHERE cid LIKE 'islandora_onthisday:%'");
+  // Then, for each one other than today's, delete that row.
+  $todays_cache_cid = 'islandora_onthisday:' . date("Y-m-d");
+  foreach ($result as $row) {
+    if ($row->cid != $todays_cache_cid) {
+      db_delete('cache')
+        ->condition('cid', $row->cid)
+        ->execute();
+    }
   }
 }

@@ -34,8 +34,7 @@ Pull requests are welcome, as are use cases and suggestions.
 
 The module is still in relatively early development and testing. Here are some features that are planned:
 
-* Cache Solr query results. The module currently queries Solr every time a user visits /onthisday, but if we cache results, we can use Drupal's cron or the included Drush script.
-* Provide an Atom feed of the day's objects.
+* Provide an RSS feed of the day's objects.
 * Provide a setting for maximum number of objects to display at /onthisdate; the subset should probably be a randomized subset of all records found in Solr as opposed to a limit on the number of documents retrieved from Solr.
 * Provide a way for the admin to exclude specific collections and content models from the list of daily objects.
 
