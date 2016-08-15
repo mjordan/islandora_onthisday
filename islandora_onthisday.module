@@ -21,7 +21,8 @@ function islandora_onthisday_menu() {
   $items['onthisday'] = array(
     'title' => 'On This Day',
     'page callback' => 'islandora_onthisday_gallery',
-    'access callback' => TRUE, // for now
+    // For now everyone can see this page - add permission?
+    'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
   return $items;
@@ -66,6 +67,11 @@ function islandora_onthisday_theme() {
       'file' => 'theme/theme.inc',
       'variables' => array('islandora_objects' => NULL),
     ),
+    'islandora_onthisday_object' => array(
+      'template' => 'theme/islandora-onthisday-object',
+      'file' => 'theme/theme.inc',
+      'variables' => array('islandora_object' => NULL),
+    ),
   );
 }
 
@@ -80,9 +86,45 @@ function islandora_onthisday_cron() {
 }
 
 /**
+ * Implements hook_block_info().
+ */
+function islandora_onthisday_block_info() {
+  return array(
+    'islandora_onthisday_random' => array(
+      'visibility' => BLOCK_VISIBILITY_LISTED,
+      'cache' => DRUPAL_NO_CACHE,
+      'info' => t('Islandora On This Day'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function islandora_onthisday_block_view($delta = '') {
+  switch ($delta) {
+    case 'islandora_onthisday_random':
+      module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+      if ($object = islandora_onthisday_get_random_object()) {
+        $block['subject'] = t('On This Day');
+        $block['content'] = array(
+          '#markup' => theme('islandora_onthisday_object',
+            array('islandora_object' => $object)));
+      }
+      else {
+        return FALSE;
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
  * Menu callback.
  */
 function islandora_onthisday_gallery($test_date = FALSE) {
+  $today = date('F j');
+  drupal_set_title("On this day, $today");
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
   if (variable_get('islandora_onthisday_test_dates_enable', 0)) {
     $objects = islandora_onthisday_get_objects($test_date);

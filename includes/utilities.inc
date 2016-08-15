@@ -8,8 +8,6 @@
 /**
  * Assembles a query to send to Solr.
  *
- * @todo: Cache results.
- *
  * @param string $date
  *   The date to use in the query. If FALSE, uses today's date.
  *
@@ -59,18 +57,55 @@ function islandora_onthisday_query_solr($query) {
   // Some silly number, so we get them all.
   $query_processor->solrLimit = '1000000';
   // Get one collection for now, @todo: get all collections.
-  $query_processor->solrParams['fl'] = 'PID,fgs_label_s,RELS_EXT_isMemberOfCollection_uri_s';
+  $fields_to_return = 'PID,fgs_label_s,RELS_EXT_isMemberOfCollection_uri_s';
+  $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
+  $query_processor->solrParams['fl'] = $fields_to_return;
   $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt');
   $query_processor->executeQuery(FALSE);
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {
+    $date_fields = explode(',', variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt'));
     foreach ($query_processor->islandoraSolrResult['response']['objects'] as $object) {
       $pid = $object['solr_doc']['PID'];
+
+      // Get a year to display. Ugly.
+      $year = '';
+      foreach ($date_fields as $date_field) {
+        if (isset($object['solr_doc'][$date_field])) {
+          if (isset($object['solr_doc'][$date_field][0])) {
+            if (preg_match('/^(\d\d\d\d)\-\d\d\-\d\d/',
+              $object['solr_doc'][$date_field][0], $matches)) {
+              $year = $matches[1];
+              break;
+            }
+          }
+        }
+      }
+
       $objects[] = array(
         'pid' => $object['solr_doc']['PID'],
         'label' => $object['solr_doc']['fgs_label_s'],
         'collection' => $object['solr_doc']['RELS_EXT_isMemberOfCollection_uri_s'],
+        'year' => $year,
       );
+
     }
   }
   return $objects;
+}
+
+/**
+ * Get a random member of the list of objects from "this day".
+ *
+ * @return array
+ *   An array representing the chosen Islandora object.
+ */
+function islandora_onthisday_get_random_object() {
+  $objects = islandora_onthisday_get_objects();
+  if (count($objects)) {
+    $random_key = array_rand($objects);
+    return $objects[$random_key];
+  }
+  else {
+    return FALSE;
+  }
 }
