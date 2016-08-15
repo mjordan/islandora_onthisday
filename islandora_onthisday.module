@@ -21,8 +21,7 @@ function islandora_onthisday_menu() {
   $items['onthisday'] = array(
     'title' => 'On This Day',
     'page callback' => 'islandora_onthisday_gallery',
-    // For now everyone can see this page - add permission?
-    'access callback' => TRUE,
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS),
     'type' => MENU_CALLBACK,
   );
   return $items;
@@ -33,19 +32,19 @@ function islandora_onthisday_menu() {
  */
 function islandora_onthisday_admin_settings() {
   $form['islandora_onthisday_date_fields'] = array(
-    '#title' => t('Date fields in Solr to query'),
+    '#title' => t('Date fields in Solr to query and retrieve'),
     '#type' => 'textfield',
     '#size' => 160,
     '#default_value' => variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_ms, mods_originInfo_dateCreated_ms'),
-    '#description' => t("Comma-separated list of Solr field names to query for dates. Date will be in YYYY-MM-DD format."),
+    '#description' => t("Comma-separated list of Solr field names to query for dates (and to retrieve in results to get the object's year). Date values are assumed to be in YYYY-MM-DD format. For best results, uses fields that are multivalued and that are tokenized."),
     '#maxlength' => 255,
   );
   $form['islandora_onthisday_sort_field'] = array(
-    '#title' => t('Sort field'),
+    '#title' => t('Date field to sort on'),
     '#type' => 'textfield',
     '#size' => 160,
     '#default_value' => variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc'),
-    '#description' => t("The Solr field to sort results on, followed by 'asc' or 'desc'."),
+    '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space the field name and asc or desc). You must use a field that is not multivalued."),
     '#maxlength' => 255,
   );
   $form['islandora_onthisday_test_dates_enable'] = array(
@@ -77,12 +76,13 @@ function islandora_onthisday_theme() {
 
 /**
  * Implements hook_cron().
+ *
+ * Currently not used; placeholder for when caching is available.
  */
-function islandora_onthisday_cron() {
+function _islandora_onthisday_cron() {
   // Get the PIDs from the Solr query.
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
   islandora_onthisday_get_objects();
-  $objects = islandora_onthisday_get_objects();
 }
 
 /**

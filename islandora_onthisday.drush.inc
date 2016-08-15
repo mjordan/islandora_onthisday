@@ -45,6 +45,7 @@ function drush_islandora_onthisday_get_objects() {
     $date = NULL;
   }
 
+  // Currently not used; placeholder for when caching is available.
   $results = islandora_onthisday_get_objects($date);
 
   if (!count($results) || !$results) {

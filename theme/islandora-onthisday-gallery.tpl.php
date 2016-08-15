@@ -2,7 +2,7 @@
 
 /**
  * @file
- * islandora-onthisday-gallery.tpl.php
+ * Islandora-onthisday-gallery.tpl.php.
  */
 ?>
 

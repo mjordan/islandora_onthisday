@@ -38,6 +38,8 @@ function islandora_onthisday_get_objects($date = FALSE) {
   // Get the object data from the Solr query.
   $objects = islandora_onthisday_query_solr($query);
 
+  // When caching is available, this function will rebuild the cache
+  // from cron or via the drush script.
   return $objects;
 }
 
