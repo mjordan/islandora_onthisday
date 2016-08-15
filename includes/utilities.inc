@@ -19,20 +19,19 @@
 function islandora_onthisday_get_objects($date = FALSE) {
   // Build the Solr query.
   if (!$date) {
-    // $date = date("Y-m-d");
+    // Get today's month and day.
     $date = date("m-d");
   }
   $fields = explode(',', variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt'));
   $query = '';
   $query_parts = array();
   foreach ($fields as $field) {
-    // We query for *-mm-dd to get today's date excluding the year.
+    // We query for *-mm-dd to get today's month and day.
     $query_parts[] = trim($field) . ':*-' . $date;
   }
 
   if (count($query_parts) > 1) {
     $query = implode(' OR ', $query_parts);
-    dd($query);
   }
   else {
     $query = $query_parts[0];

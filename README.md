@@ -1,6 +1,6 @@
 # Islandora On This Day
 
-Utility module that queries Solr for objects whose date fields is equal to the current day.
+Utility module that queries Solr for objects whose date fields contain a month and day equal to the current day's. It displays a gallery of thumbnails for the objects it finds at /onthisday.
 
 Still under development.
 
@@ -12,6 +12,8 @@ Still under development.
 ## Usage
 
 Enable this module as you would any other, and configure it at admin/islandora/tools/onthisday.
+
+You can add a test month and day to the end of /onthisday for testing purposes. For example, /onthisday/12-31 will show all objects with dates ending in 12-31 (2000-12-31, 2003-12-31, etc). For this to work, you need to check the "Enable adding test dates in URL" setting in the module's admin options.
 
 ## Maintainer
 

@@ -20,7 +20,6 @@ function islandora_onthisday_menu() {
   );
   $items['onthisday'] = array(
     'title' => 'On This Day',
-    'description' => 'Configure the Islandora On This Day module.',
     'page callback' => 'islandora_onthisday_gallery',
     'access callback' => TRUE, // for now
     'type' => MENU_CALLBACK,
@@ -47,6 +46,12 @@ function islandora_onthisday_admin_settings() {
     '#default_value' => variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc'),
     '#description' => t("The Solr field to sort results on, followed by 'asc' or 'desc'."),
     '#maxlength' => 255,
+  );
+  $form['islandora_onthisday_test_dates_enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable adding test dates in URL, e.g., /onthisday/12-31.'),
+    '#default_value' => variable_get('islandora_onthisday_test_dates_enable', 0),
+    '#description' => t('For testing purposes only. Disable in production. Test date must be in mm-dd format.'),
   );
   return system_settings_form($form);
 }
@@ -77,9 +82,14 @@ function islandora_onthisday_cron() {
 /**
  * Menu callback.
  */
-function islandora_onthisday_gallery() {
+function islandora_onthisday_gallery($test_date = FALSE) {
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
-  $objects = islandora_onthisday_get_objects();
+  if (variable_get('islandora_onthisday_test_dates_enable', 0)) {
+    $objects = islandora_onthisday_get_objects($test_date);
+  }
+  else {
+    $objects = islandora_onthisday_get_objects();
+  }
   $output = theme('islandora_onthisday_gallery', array('islandora_objects' => $objects));
   return $output;
 }
