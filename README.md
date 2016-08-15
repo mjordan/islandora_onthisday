@@ -23,7 +23,6 @@ Pull requests are welcome, as are use cases and suggestions.
 
 ## Planned Development
 
-* Add cron hook
 * Cache results
 * Provide a block that shows a random object with today's date
 * Provide a page that lists all the objects
