@@ -18,6 +18,13 @@ function islandora_onthisday_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['onthisday'] = array(
+    'title' => 'On This Day',
+    'description' => 'Configure the Islandora On This Day module.',
+    'page callback' => 'islandora_onthisday_gallery',
+    'access callback' => TRUE, // for now
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 
@@ -45,10 +52,34 @@ function islandora_onthisday_admin_settings() {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function islandora_onthisday_theme() {
+  return array(
+    'islandora_onthisday_gallery' => array(
+      'template' => 'theme/islandora-onthisday-gallery',
+      'file' => 'theme/theme.inc',
+      'variables' => array('islandora_objects' => NULL),
+    ),
+  );
+}
+
+/**
  * Implements hook_cron().
  */
 function islandora_onthisday_cron() {
   // Get the PIDs from the Solr query.
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+  islandora_onthisday_get_objects();
   $objects = islandora_onthisday_get_objects();
+}
+
+/**
+ * Menu callback.
+ */
+function islandora_onthisday_gallery() {
+  module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+  $objects = islandora_onthisday_get_objects();
+  $output = theme('islandora_onthisday_gallery', array('islandora_objects' => $objects));
+  return $output;
 }
