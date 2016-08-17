@@ -213,10 +213,6 @@ function islandora_onthisday_subset_objects(array $data) {
     $subset_rand_pool = array(1);
   }
 
-  if (count($subset_rand_pool) <= $config_limit) {
-    return $data;
-  }
-
   $reduced = array();
   foreach ($data as $key => $value) {
     if (in_array($key, $subset_rand_pool)) {
