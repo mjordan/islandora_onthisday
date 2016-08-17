@@ -64,7 +64,7 @@ function islandora_onthisday_get_objects($date = FALSE) {
  *   The query to send to Solr.
  *
  * @return array
- *   An array containing all of the PIDs matching $query.
+ *   An array of arrays containing attributes for objects matching $query.
  */
 function islandora_onthisday_query_solr($query) {
   $objects = array();
@@ -72,9 +72,10 @@ function islandora_onthisday_query_solr($query) {
   $query_processor->solrQuery = $query;
   // Some silly number, so we get them all.
   $query_processor->solrLimit = '1000000';
-  // Get one collection for now, @todo: get all collections.
-  $fields_to_return = 'PID,fgs_label_s,RELS_EXT_isMemberOfCollection_uri_s';
+  $fields_to_return = 'PID,fgs_label_s';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
+  $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
+  $fields_to_return .= ',' . $collection_field;
   $query_processor->solrParams['fl'] = $fields_to_return;
   $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt');
   $query_processor->executeQuery(FALSE);
@@ -100,7 +101,7 @@ function islandora_onthisday_query_solr($query) {
       $objects[] = array(
         'pid' => $object['solr_doc']['PID'],
         'label' => $object['solr_doc']['fgs_label_s'],
-        'collection' => $object['solr_doc']['RELS_EXT_isMemberOfCollection_uri_s'],
+        'collections' => islandora_onthisday_get_collection_labels($object['solr_doc']),
         'year' => $year,
       );
 
@@ -148,4 +149,35 @@ function islandora_onthisday_clear_cache() {
         ->execute();
     }
   }
+}
+
+/**
+ * Queries Solr to get labels of collections associated with the object.
+ *
+ * @param string $doc
+ *   The Solr document for an object.
+ *
+ * @return array
+ *   An associative array containing collection PIDs => labels.
+ */
+function islandora_onthisday_get_collection_labels($doc) {
+  $collection_labels = array();
+  $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
+  $query_processor = new IslandoraSolrQueryProcessor();
+  $label = '';
+  $pid = $doc['PID'];
+  $pid = str_replace('info:fedora/', '', $pid);
+
+  foreach ($doc[$collection_field] as $collection_pid) {
+    $query_processor->buildQuery("PID:\"$pid\"");
+    $query_processor->solrParams['fl'] = 'PID, ' . $collection_field;
+    $query_processor->executeQuery();
+    if (!empty($query_processor->islandoraSolrResult) && !empty($query_processor->islandoraSolrResult['response']['objects'])) {
+      $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['object_label']) ?
+        $query_processor->islandoraSolrResult['response']['objects'][0]['object_label'] : '');
+      $collection_labels[$pid] = $label;
+    }
+  }
+  dd($collection_labels, 'Collection labels');
+  return $collection_labels;
 }

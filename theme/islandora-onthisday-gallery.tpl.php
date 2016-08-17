@@ -16,7 +16,11 @@
   <?php foreach($islandora_objects as $item): ?>
     <dl class="islandora-basic-collection-object">
         <dt class="islandora-basic-collection-thumb"><a href="<?php print filter_xss($item['title_link']); ?>"><img src="<?php print $item['thumb_link']; ?>" /></a></dt>
-        <dd class="islandora-basic-collection-caption"><a href="<?php print filter_xss($item['title_link']); ?>"><?php print $item['label']; ?></a> (<?php print $item['year']; ?>)</dd>
+        <dd class="islandora-basic-collection-caption"><a href="<?php print filter_xss($item['title_link']); ?>"><?php print $item['label']; ?></a> (<?php print $item['year']; ?>)
+        <?php foreach($item['collections'] as $pid => $label): ?>
+          <!-- @todo: Render links to collections. ->>
+        <?php endforeach; ?>
+        </dd>
     </dl>
   <?php endforeach; ?>
 
