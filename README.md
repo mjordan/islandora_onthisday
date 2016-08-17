@@ -14,13 +14,13 @@ The module lets admins configure a list of fields to query in Solr for date info
 
 ## Usage
 
-Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Once you do this, you should be able to see at `/onthisday` objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
+Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Once you do this, visiting `/onthisday` will display a list of objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
 
-This module also provides a block titled "Islandora On This Day" that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects.
+This module also provides an "Islandora On This Day" block that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects.
 
 ## Testing your gallery
 
-You can test your gallery by appending a test month and day to the end of /onthisday. For example, /onthisday/12-31 will show all objects with dates ending in 12-31 (2000-12-31, 2003-12-31, etc). For this to work, you need to check the "Enable adding test dates in URL" setting in the module's admin options. Make sure this option is turned off in production.
+You can test your gallery by appending a test month and day to the end of `/onthisday`. For example, `/onthisday/12-31i` will show all objects with dates ending in 12-31 (1945-12-31, 2003-12-31, etc). For this to work, you need to check the "Enable adding test dates in URL" setting in the module's admin options. Make sure this option is turned off in production. Also note that this feature only works while caching of "on this day" items is turned off.
 
 ## Maintainer
 
@@ -35,7 +35,6 @@ Pull requests are welcome, as are use cases and suggestions.
 The module is still in relatively early development and testing. Here are some features that are planned:
 
 * Provide an RSS feed of the day's objects.
-* Provide a setting for maximum number of objects to display at /onthisdate; the subset should probably be a randomized subset of all records found in Solr as opposed to a limit on the number of documents retrieved from Solr.
 * Provide a way for the admin to exclude specific collections and content models from the list of daily objects.
 
 ## License

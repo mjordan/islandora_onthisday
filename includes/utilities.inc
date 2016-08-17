@@ -12,7 +12,7 @@
  *   The date to use in the query. If FALSE, uses today's date.
  *
  * @return array
- *   An array containing all of the PIDs matching $query.
+ *   An array of arrays containing attributes for objects matching $query.
  */
 function islandora_onthisday_get_objects($date = FALSE) {
   if (variable_get('islandora_onthisday_cache_data', 0)) {
@@ -45,6 +45,10 @@ function islandora_onthisday_get_objects($date = FALSE) {
   // Get the object data from the Solr query.
   $objects = islandora_onthisday_query_solr($query);
 
+  if (variable_get('islandora_onthisday_set_limit', 0)) {
+    $objects = islandora_onthisday_subset_objects($objects);
+  }
+
   if (variable_get('islandora_onthisday_cache_data', 0)) {
     if (!$cached = cache_get($todays_cache_cid)) {
       // It makes more sense to make this cache CACHE_TEMPORARY, but
@@ -54,6 +58,7 @@ function islandora_onthisday_get_objects($date = FALSE) {
       cache_set($todays_cache_cid, $objects, 'cache', CACHE_PERMANENT);
     }
   }
+
   return $objects;
 }
 
@@ -70,14 +75,14 @@ function islandora_onthisday_query_solr($query) {
   $objects = array();
   $query_processor = new IslandoraSolrQueryProcessor();
   $query_processor->solrQuery = $query;
-  // Some silly number, so we get them all.
-  $query_processor->solrLimit = '1000000';
+
   $fields_to_return = 'PID,fgs_label_s';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
   $fields_to_return .= ',' . $collection_field;
   $query_processor->solrParams['fl'] = $fields_to_return;
   $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt');
+  $query_processor->solrLimit = '1000000';
   $query_processor->executeQuery(FALSE);
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {
     $date_fields = explode(',', variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt'));
@@ -183,4 +188,40 @@ function islandora_onthisday_get_collection_labels($doc) {
     }
   }
   return $collection_labels;
+}
+
+/**
+ * Subsets the number of objects to display in gallery to a smaller number.
+ *
+ * @param array $data
+ *   The arrary of object data to subset.
+ *
+ * @return array
+ *   The reduced list of object data. List is ramdomized but
+ *   sort order of original array is preserved.
+ */
+function islandora_onthisday_subset_objects(array $data) {
+  $config_limit = variable_get('islandora_onthisday_max_objects', '50');
+  if (count($data) <= $config_limit) {
+    return $data;
+  }
+
+  $range_limit = count($data) - 1;
+  $rand_pool = range(0, $range_limit);
+  $subset_rand_pool = array_rand($rand_pool, $config_limit);
+  if (is_int($subset_rand_pool)) {
+    $subset_rand_pool = array(1);
+  }
+
+  if (count($subset_rand_pool) <= $config_limit) {
+    return $data;
+  }
+
+  $reduced = array();
+  foreach ($data as $key => $value) {
+    if (in_array($key, $subset_rand_pool)) {
+      $reduced[] = $value;
+    }
+  }
+  return $reduced;
 }
