@@ -164,6 +164,12 @@ function islandora_onthisday_get_collection_labels($doc) {
   $collection_labels = array();
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
 
+  // If the solr document for the object doesn't contain the
+  // collection field, bail.
+  if (!isset($doc[$collection_field])) {
+    return array();
+  }
+
   foreach ($doc[$collection_field] as $pid) {
     $pid = str_replace('info:fedora/', '', $pid);
     $query_processor = new IslandoraSolrQueryProcessor();
