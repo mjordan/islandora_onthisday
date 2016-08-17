@@ -47,6 +47,12 @@ function islandora_onthisday_admin_settings() {
     '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space between the field name and asc or desc). You must use a field that is not multivalued."),
     '#maxlength' => 255,
   );
+  $form['islandora_onthisday_show_collections'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display collection links'),
+    '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
+    '#description' => t('Display links to collections in gallery and block entries.'),
+  );
   $form['islandora_onthisday_cache_data'] = array(
     '#type' => 'checkbox',
     '#title' => t('Cache list of daily objects'),
@@ -110,7 +116,7 @@ function islandora_onthisday_block_view($delta = '') {
       module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
       if ($object = islandora_onthisday_get_random_object()) {
         $more_url = url("/onthisday");
-        $more_markup = ' <a href="' . $more_url . '">' . t('More...') . '</a>';
+        $more_markup = ' <span id="islandora-onthisday-random-more"><a href="' . $more_url . '">' . t('More...') . '</a></span>';
         $block['subject'] = t('On This Day') . $more_markup;
         $block['content'] = array(
           '#markup' => theme('islandora_onthisday_object',

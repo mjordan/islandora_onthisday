@@ -16,7 +16,7 @@
  */
 function islandora_onthisday_get_objects($date = FALSE) {
   if (variable_get('islandora_onthisday_cache_data', 0)) {
-    $todays_cache_cid = 'islandora_onthisday:' . date("Y-m-d");
+    $todays_cache_cid = 'islandora_onthisday:' . date("m-d");
     if ($cached = cache_get($todays_cache_cid)) {
       return $cached->data;
     }
@@ -141,7 +141,7 @@ function islandora_onthisday_clear_cache() {
   // 'islandora_onthisday:'.
   $result = db_query("SELECT cid FROM {cache} WHERE cid LIKE 'islandora_onthisday:%'");
   // Then, for each one other than today's, delete that row.
-  $todays_cache_cid = 'islandora_onthisday:' . date("Y-m-d");
+  $todays_cache_cid = 'islandora_onthisday:' . date("m-d");
   foreach ($result as $row) {
     if ($row->cid != $todays_cache_cid) {
       db_delete('cache')
@@ -163,14 +163,12 @@ function islandora_onthisday_clear_cache() {
 function islandora_onthisday_get_collection_labels($doc) {
   $collection_labels = array();
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
-  $query_processor = new IslandoraSolrQueryProcessor();
-  $label = '';
-  $pid = $doc['PID'];
-  $pid = str_replace('info:fedora/', '', $pid);
 
-  foreach ($doc[$collection_field] as $collection_pid) {
+  foreach ($doc[$collection_field] as $pid) {
+    $pid = str_replace('info:fedora/', '', $pid);
+    $query_processor = new IslandoraSolrQueryProcessor();
     $query_processor->buildQuery("PID:\"$pid\"");
-    $query_processor->solrParams['fl'] = 'PID, ' . $collection_field;
+    $query_processor->solrParams['fl'] = 'PID,fgs_label_s';
     $query_processor->executeQuery();
     if (!empty($query_processor->islandoraSolrResult) && !empty($query_processor->islandoraSolrResult['response']['objects'])) {
       $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['object_label']) ?
@@ -178,6 +176,5 @@ function islandora_onthisday_get_collection_labels($doc) {
       $collection_labels[$pid] = $label;
     }
   }
-  dd($collection_labels, 'Collection labels');
   return $collection_labels;
 }

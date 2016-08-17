@@ -15,6 +15,10 @@ function islandora_onthisday_preprocess_islandora_onthisday_gallery(array &$vari
   foreach ($variables['islandora_objects'] as &$object) {
     $object['thumb_link'] = url("islandora/object/" . $object['pid'] . "/datastream/TN/view");
     $object['title_link'] = url("islandora/object/" . $object['pid']);
+    $object['collections_label'] = (count($object['collections']) > 1) ? t('Collections') : t('Collection');
+    if (!variable_get('islandora_onthisday_show_collections', 0)) {
+      $object['collections'] = array();
+    }
   }
 }
 
@@ -29,4 +33,8 @@ function islandora_onthisday_preprocess_islandora_onthisday_object(array &$varia
     $variables['islandora_object']['pid'] . "/datastream/TN/view");
   $variables['islandora_object']['title_link'] = url("islandora/object/" .
     $variables['islandora_object']['pid']);
+  $variables['islandora_object']['collections_label'] = (count($variables['islandora_object']['collections']) > 1) ? t('Collections') : t('Collection');
+  if (!variable_get('islandora_onthisday_show_collections', 0)) {
+    $variables['islandora_object']['collections'] = array();
+  }
 }

@@ -17,9 +17,14 @@
     <dl class="islandora-basic-collection-object">
         <dt class="islandora-basic-collection-thumb"><a href="<?php print filter_xss($item['title_link']); ?>"><img src="<?php print $item['thumb_link']; ?>" /></a></dt>
         <dd class="islandora-basic-collection-caption"><a href="<?php print filter_xss($item['title_link']); ?>"><?php print $item['label']; ?></a> (<?php print $item['year']; ?>)
-        <?php foreach($item['collections'] as $pid => $label): ?>
-          <!-- @todo: Render links to collections. ->>
-        <?php endforeach; ?>
+        <?php if (count($item['collections'])): ?>
+          <div id="islandora-onthisday-collection-info">
+          <div id="islandora-onthisday-collections-label"><?php print $item['collections_label']; ?>:</div>
+          <?php foreach($item['collections'] as $pid => $label): ?>
+            <div class="islandora-onthisday-collection-link"><a href="/islandora/object/<?php print $pid; ?>"><?php print filter_xss($label); ?></a></div>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
         </dd>
     </dl>
   <?php endforeach; ?>
