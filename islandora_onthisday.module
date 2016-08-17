@@ -44,7 +44,7 @@ function islandora_onthisday_admin_settings() {
     '#type' => 'textfield',
     '#size' => 160,
     '#default_value' => variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc'),
-    '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space the field name and asc or desc). You must use a field that is not multivalued."),
+    '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space between the field name and asc or desc). You must use a field that is not multivalued."),
     '#maxlength' => 255,
   );
   $form['islandora_onthisday_cache_data'] = array(
@@ -55,7 +55,7 @@ function islandora_onthisday_admin_settings() {
   );
   $form['islandora_onthisday_test_dates_enable'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable adding test dates in URL, e.g., /onthisday/02-26.'),
+    '#title' => t('Enable adding test date in URL, e.g., /onthisday/02-26.'),
     '#default_value' => variable_get('islandora_onthisday_test_dates_enable', 0),
     '#description' => t('For testing purposes only. Disable in production. Test date must be in mm-dd format.'),
   );
@@ -109,7 +109,9 @@ function islandora_onthisday_block_view($delta = '') {
     case 'islandora_onthisday_random':
       module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
       if ($object = islandora_onthisday_get_random_object()) {
-        $block['subject'] = t('On This Day');
+        $more_url = url("/onthisday");
+        $more_markup = ' <a href="' . $more_url . '">' . t('More...') . '</a>';
+        $block['subject'] = t('On This Day') . $more_markup;
         $block['content'] = array(
           '#markup' => theme('islandora_onthisday_object',
             array('islandora_object' => $object)));

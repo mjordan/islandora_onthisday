@@ -14,9 +14,9 @@ The module lets admins configure a list of fields to query in Solr for date info
 
 ## Usage
 
-Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Onc you do this, you should be able to see objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
+Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Once you do this, you should be able to see at `/onthisday` objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
 
-You will also see a block titled "Islandora On This Day" that will show one randomly selected object that has the current month/day. It will not appear if there are no matching objects.
+This module also provides a block titled "Islandora On This Day" that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects.
 
 ## Testing your gallery
 

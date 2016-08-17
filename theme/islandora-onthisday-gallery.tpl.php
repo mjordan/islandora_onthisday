@@ -3,11 +3,12 @@
 /**
  * @file
  * Islandora-onthisday-gallery.tpl.php.
+ *
+ * Borrows markup from the output of the Basic Collection Solution Pack.
  */
 ?>
 
 <div class="islandora islandora-onthisday-grid">
-
 <?php if (!count($islandora_objects)): ?>
   <p class="no-results"><?php print t('Sorry, there are no objects with a date that is "on this day".'); ?></p>
 <?php else: ?>
