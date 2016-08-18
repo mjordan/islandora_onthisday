@@ -2,11 +2,11 @@
 
 Utility module that queries Solr for objects whose date fields contain a month and day equal to the current day's. The module:
 
-* displays a gallery of thumbnails at /onthisday for the objects it finds in Solr
-* provides a block that displays a random object from the list of those whose month and day match the current day's.
-* provides an RSS feed containing items corresponding to the current day's gallery.
+* displays a gallery of thumbnails at `/onthisday` for the objects it finds in Solr
+* provides a block that displays a random object from the list of those whose month and day match the current day's
+* provides an RSS feed at `/onthisday/rss` containing items corresponding to the current day's gallery
 
-The module lets admins configure a list of fields to query in Solr for date information, but assumes that the date values are in YYYY-MM-DD format (which is a recommended format for dates in MODS, for example).
+The module lets admins configure a list of date query and sort fields in Solr, but assumes that date values are in YYYY-MM-DD format (which is a recommended format for dates in MODS, for example).
 
 ## Requirements
 
@@ -21,7 +21,7 @@ This module also provides an "Islandora On This Day" block that will show one ra
 
 ## Testing your gallery
 
-You can test your gallery by appending a test month and day to the end of `/onthisday`. For example, `/onthisday/12-31i` will show all objects with dates ending in 12-31 (1945-12-31, 2003-12-31, etc). For this to work, you need to check the "Enable adding test dates in URL" setting in the module's admin options. Make sure this option is turned off in production. Also note that this feature only works while caching of "on this day" items is turned off.
+You can test your gallery by appending a test month and day to the end of `/onthisday`. For example, `/onthisday/12-31` will show all objects with dates ending in 12-31 (1945-12-31, 2003-12-31, etc). For this to work, you need to check the "Enable adding test dates in URL" setting in the module's admin options. Make sure this option is turned off in production. Also note that this feature only works while caching of "on this day" items is turned off.
 
 ## Maintainer
 
@@ -35,7 +35,9 @@ Pull requests are welcome, as are use cases and suggestions.
 
 The module is still in relatively early development and testing. Here are some features that are planned:
 
-* Provide a way for the admin to exclude specific collections and content models from the list of daily objects.
+* Provide a way for admins to exclude specific collections, content models, and namespaces from the list of daily objects.
+* Add a debug mode that displays query and sort fields to admin users below each entry in gallery.
+* Add some config options for the RSS feed.
 
 ## License
 
