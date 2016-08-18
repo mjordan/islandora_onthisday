@@ -81,7 +81,7 @@ function islandora_onthisday_query_solr($query) {
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
   $fields_to_return .= ',' . $collection_field;
   $query_processor->solrParams['fl'] = $fields_to_return;
-  $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt');
+  $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc');
   $query_processor->solrLimit = '1000000';
   $query_processor->executeQuery(FALSE);
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {

@@ -18,7 +18,10 @@
   <?php foreach($islandora_objects as $item): ?>
     <dl class="islandora-basic-collection-object">
         <dt class="islandora-basic-collection-thumb"><a href="<?php print filter_xss($item['title_link']); ?>"><img src="<?php print $item['thumb_link']; ?>" /></a></dt>
-        <dd class="islandora-basic-collection-caption"><a href="<?php print filter_xss($item['title_link']); ?>"><?php print $item['label']; ?></a> (<?php print $item['year']; ?>)
+        <dd class="islandora-basic-collection-caption"><a href="<?php print filter_xss($item['title_link']); ?>"><?php print $item['label']; ?></a>
+        <?php if (strlen($item['year'])): ?>
+        (<?php print $item['year']; ?>)
+        <?php endif; ?>
         <?php if (count($item['collections'])): ?>
           <div id="islandora-onthisday-collection-info">
           <div id="islandora-onthisday-collections-label"><?php print $item['collections_label']; ?>:</div>

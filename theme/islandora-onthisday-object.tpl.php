@@ -6,7 +6,11 @@
  */
 ?>
   <div><a href="<?php print filter_xss($islandora_object['title_link']); ?>"><img src="<?php print $islandora_object['thumb_link']; ?>" /></a></div>
-   <div><a href="<?php print filter_xss($islandora_object['title_link']); ?>"><?php print $islandora_object['label']; ?></a> (<?php print $islandora_object['year']; ?>)</div>
+   <div><a href="<?php print filter_xss($islandora_object['title_link']); ?>"><?php print $islandora_object['label']; ?></a>
+   <?php if (strlen($islandora_object['year'])): ?>
+   (<?php print $islandora_object['year']; ?>)
+   <?php endif; ?>
+   </div>
    <?php if (count($islandora_object['collections'])): ?>
      <div id="islandora-onthisday-collection-info">
      <div id="islandora-onthisday-collections-label"><?php print $islandora_object['collections_label']; ?>:</div>

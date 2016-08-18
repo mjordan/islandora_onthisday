@@ -21,7 +21,11 @@
 <?php if (count($islandora_objects)): ?>
   <?php foreach($islandora_objects as $item): ?>
   <item>
-      <title><?php print $item['label'] . ' [' . $item['year'] . ']';?></title>
+      <?php if (strlen($item['year'])): ?>
+      <title><?php print $item['label'] . ' [' . $item['year'] . ']'; ?></title>
+      <?php else: ?>
+      <title><?php print $item['label']; ?></title>
+      <?php endif; ?>
       <link><?php print $item['url']; ?></link>
       <description></description>
       <author />
