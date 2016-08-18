@@ -24,6 +24,12 @@ function islandora_onthisday_menu() {
     'access arguments' => array(ISLANDORA_VIEW_OBJECTS),
     'type' => MENU_CALLBACK,
   );
+  $items['onthisday/rss'] = array(
+    'page callback' => 'islandora_onthisday_rss_channel',
+    'delivery callback' => 'islandora_onthisday_rss_output',
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 
@@ -49,16 +55,17 @@ function islandora_onthisday_admin_settings() {
   );
   $form['islandora_onthisday_set_limit'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Limit number of objects'),
+    '#title' => t('Limit number of objects in gallery'),
     '#default_value' => variable_get('islandora_onthisday_set_limit', 0),
-    '#description' => t('Limit the number of objects to appear in the gallery to a random subset.'),
+    '#description' => t('Limit the number of objects in the "On this day" gallery.'),
   );
   $form['islandora_onthisday_max_objects'] = array(
-    '#title' => t('Maximum size of gallery'),
+    '#title' => t('Maximum number of objects to show'),
     '#type' => 'textfield',
     '#size' => 10,
     '#default_value' => variable_get('islandora_onthisday_max_objects', '50'),
     '#maxlength' => 5,
+    '#description' => t('Objects shown will be a randomly selected subset of all matching objects.'),
     '#states' => array(
       'visible' => array(
         ':input[name="islandora_onthisday_set_limit"]' => array('checked' => TRUE),
@@ -100,6 +107,11 @@ function islandora_onthisday_theme() {
       'template' => 'theme/islandora-onthisday-object',
       'file' => 'theme/theme.inc',
       'variables' => array('islandora_object' => NULL),
+    ),
+    'islandora_onthisday_rss_channel' => array(
+      'template' => 'theme/islandora-onthisday-rss-channel',
+      'file' => 'theme/theme.inc',
+      'variables' => array('islandora_objects' => NULL),
     ),
   );
 }
@@ -163,4 +175,22 @@ function islandora_onthisday_gallery($test_date = FALSE) {
   }
   $output = theme('islandora_onthisday_gallery', array('islandora_objects' => $objects));
   return $output;
+}
+
+/**
+ * Menu callback.
+ */
+function islandora_onthisday_rss_channel() {
+  module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+  $objects = islandora_onthisday_get_objects();
+  $output = theme('islandora_onthisday_rss_channel', array('islandora_objects' => $objects));
+  return $output;
+}
+
+/**
+ * Delivery callback.
+ */
+function islandora_onthisday_rss_output($rss_output) {
+  drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
+  print $rss_output;
 }

@@ -4,6 +4,7 @@ Utility module that queries Solr for objects whose date fields contain a month a
 
 * displays a gallery of thumbnails at /onthisday for the objects it finds in Solr
 * provides a block that displays a random object from the list of those whose month and day match the current day's.
+* provides an RSS feed containing items corresponding to the current day's gallery.
 
 The module lets admins configure a list of fields to query in Solr for date information, but assumes that the date values are in YYYY-MM-DD format (which is a recommended format for dates in MODS, for example).
 
@@ -34,7 +35,6 @@ Pull requests are welcome, as are use cases and suggestions.
 
 The module is still in relatively early development and testing. Here are some features that are planned:
 
-* Provide an RSS feed of the day's objects.
 * Provide a way for the admin to exclude specific collections and content models from the list of daily objects.
 
 ## License

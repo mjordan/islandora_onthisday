@@ -12,6 +12,10 @@
  *   The variables passed in from the theming layer.
  */
 function islandora_onthisday_preprocess_islandora_onthisday_gallery(array &$variables) {
+  $path = drupal_get_path('module', 'islandora_solr_config');
+  $variables['rss_icon_path'] = $path . '/images/rss.png';
+  $variables['rss_icon_alt'] = t("RSS feed");
+
   foreach ($variables['islandora_objects'] as &$object) {
     $object['thumb_link'] = url("islandora/object/" . $object['pid'] . "/datastream/TN/view");
     $object['title_link'] = url("islandora/object/" . $object['pid']);
@@ -36,5 +40,28 @@ function islandora_onthisday_preprocess_islandora_onthisday_object(array &$varia
   $variables['islandora_object']['collections_label'] = (count($variables['islandora_object']['collections']) > 1) ? t('Collections') : t('Collection');
   if (!variable_get('islandora_onthisday_show_collections', 0)) {
     $variables['islandora_object']['collections'] = array();
+  }
+}
+
+/**
+ * Default template: islandora-onthisday-rss-channel.tpl.php.
+ *
+ * @param array $variables
+ *   The variables passed in from the theming layer.
+ */
+function islandora_onthisday_preprocess_islandora_onthisday_rss_channel(array &$variables) {
+  global $base_url;
+  $variables['basee_url'] = $base_url;
+  $variables['site_name'] = variable_get('site_name', 'Drupal');
+  $variables['today'] = date('F j');
+  foreach ($variables['islandora_objects'] as &$item) {
+    $islandora_object = islandora_object_load($item['pid']);
+    if ($islandora_object['TN']) {
+      $tn = $islandora_object['TN'];
+      $item['thumb_size'] = $tn->size;
+      $item['mimetype'] = $tn->mimetype;
+    }
+    $item['thumb_link'] = url("$base_url/islandora/object/" . $item['pid'] . "/datastream/TN/view");
+    $item['url'] = url("$base_url/islandora/object/" . $item['pid']);
   }
 }
