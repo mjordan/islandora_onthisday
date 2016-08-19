@@ -36,7 +36,6 @@ Pull requests are welcome, as are use cases and suggestions.
 The module is still in relatively early development and testing. Here are some features that are planned:
 
 * Provide a way for admins to exclude specific collections, content models, and namespaces from the list of daily objects.
-* Add a debug mode that displays query and sort fields to admin users below each entry in gallery.
 * Add some config options for the RSS feed.
 
 ## License

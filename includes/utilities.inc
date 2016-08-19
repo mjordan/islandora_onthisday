@@ -79,9 +79,11 @@ function islandora_onthisday_query_solr($query) {
   $fields_to_return = 'PID,fgs_label_s';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
-  $fields_to_return .= ',' . $collection_field;
+  $sort_field = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc');
+  $sort_field_bare = preg_replace('/\s+(asc|desc)/', '', $sort_field);
+  $fields_to_return .= ',' . $collection_field . ',' . $sort_field_bare;
   $query_processor->solrParams['fl'] = $fields_to_return;
-  $query_processor->solrParams['sort'] = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc');
+  $query_processor->solrParams['sort'] = $sort_field;
   $query_processor->solrLimit = '1000000';
   $query_processor->executeQuery(FALSE);
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {
@@ -103,11 +105,17 @@ function islandora_onthisday_query_solr($query) {
         }
       }
 
+      $debugging_metadata = '';
+      if (variable_get('islandora_onthisday_show_debugging_metadata', 0) && user_has_role(3)) {
+        $debugging_metadata = var_export($object['solr_doc'], TRUE);
+      }
+
       $objects[] = array(
         'pid' => $object['solr_doc']['PID'],
         'label' => $object['solr_doc']['fgs_label_s'],
         'collections' => islandora_onthisday_get_collection_labels($object['solr_doc']),
         'year' => $year,
+        'debugging_metadata' => $debugging_metadata,
       );
 
     }

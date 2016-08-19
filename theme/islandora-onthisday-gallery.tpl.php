@@ -31,7 +31,13 @@
         </div>
         <?php endif; ?>
         </dd>
+        <?php if (strlen($item['debugging_metadata'])): ?>
+        <dd>
+        <pre><?php print $item['debugging_metadata']; ?></pre>
+        </dd>
+        <?php endif; ?>
     </dl>
+
   <?php endforeach; ?>
 
   </div>

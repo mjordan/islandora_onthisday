@@ -90,6 +90,12 @@ function islandora_onthisday_admin_settings() {
     '#default_value' => variable_get('islandora_onthisday_test_dates_enable', 0),
     '#description' => t('For testing purposes only; disable in production. Test date must be in mm-dd format. Does not work if caching is enabled.'),
   );
+  $form['islandora_onthisday_show_debugging_metadata'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display debugging metadata'),
+    '#default_value' => variable_get('islandora_onthisday_show_debugging_metadata', 0),
+    '#description' => t('Display metadata to admin users for debugging purposes.'),
+  );
   return system_settings_form($form);
 }
 
