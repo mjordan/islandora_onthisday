@@ -79,9 +79,15 @@ function islandora_onthisday_query_solr($query) {
   $fields_to_return = 'PID,fgs_label_s';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
-  $sort_field = variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc');
-  $sort_field_bare = preg_replace('/\s+(asc|desc)/', '', $sort_field);
-  $fields_to_return .= ',' . $collection_field . ',' . $sort_field_bare;
+  if (strlen(variable_get('islandora_onthisday_sort_field', ''))) {
+    $sort_field = variable_get('islandora_onthisday_sort_field', '');
+    $sort_field_bare = preg_replace('/\s+(asc|desc)/', '', $sort_field);
+    $fields_to_return .= ',' . $collection_field . ',' . $sort_field_bare;
+  }
+  else {
+    $sort_field = variable_get('islandora_onthisday_sort_field', '');
+    $fields_to_return .= ',' . $collection_field;
+  }
   $query_processor->solrParams['fl'] = $fields_to_return;
   $query_processor->solrParams['sort'] = $sort_field;
   $query_processor->solrLimit = '1000000';
@@ -120,7 +126,22 @@ function islandora_onthisday_query_solr($query) {
 
     }
   }
+  if (!strlen(variable_get('islandora_onthisday_sort_field', ''))) {
+    usort($objects, 'islandora_onthisday_sort_entries_by_year');
+  }
   return $objects;
+}
+
+/**
+ * Sorts the list of entries by year value.
+ *
+ * @param string $a
+ *   The first string as defined by usort()'s value_compare_func parameter.
+ * @param string $b
+ *   The second string as defined by usort()'s value_compare_func parameter.
+ */
+function islandora_onthisday_sort_entries_by_year($a, $b) {
+  return strnatcmp($a['year'], $b['year']);
 }
 
 /**

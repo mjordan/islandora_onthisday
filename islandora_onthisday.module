@@ -49,8 +49,8 @@ function islandora_onthisday_admin_settings() {
     '#title' => t('Date field to sort on'),
     '#type' => 'textfield',
     '#size' => 160,
-    '#default_value' => variable_get('islandora_onthisday_sort_field', 'mods_originInfo_dateIssued_dt asc'),
-    '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space between the field name and asc or desc). You must use a field that is not multivalued."),
+    '#default_value' => variable_get('islandora_onthisday_sort_field', ''),
+    '#description' => t('The Solr field to sort results on, followed by " asc" or " desc" (for example, "mods_originInfo_dateIssued_dt asc"). You must use a field that is not multivalued. Leave blank to bypass Solr sorting and sort on the year value parsed out from the metadata.'),
     '#maxlength' => 255,
   );
   $form['islandora_onthisday_show_collections'] = array(
