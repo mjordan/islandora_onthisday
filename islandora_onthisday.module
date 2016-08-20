@@ -53,6 +53,18 @@ function islandora_onthisday_admin_settings() {
     '#description' => t("The Solr field to sort results on, followed by ' asc' or ' desc' (there must be a space between the field name and asc or desc). You must use a field that is not multivalued."),
     '#maxlength' => 255,
   );
+  $form['islandora_onthisday_show_collections'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display collection links'),
+    '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
+    '#description' => t('Display links to collections object is in.'),
+  );
+  $form['islandora_onthisday_cache_data'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Cache list of daily objects'),
+    '#default_value' => variable_get('islandora_onthisday_cache_data', 0),
+    '#description' => t('May improve performance on large or busy sites. Old daily caches are cleared by Drupal cron.'),
+  );
   $form['islandora_onthisday_set_limit'] = array(
     '#type' => 'checkbox',
     '#title' => t('Limit number of objects in gallery'),
@@ -72,18 +84,6 @@ function islandora_onthisday_admin_settings() {
       ),
     ),
   );
-  $form['islandora_onthisday_show_collections'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display collection links'),
-    '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
-    '#description' => t('Display links to collections object is in.'),
-  );
-  $form['islandora_onthisday_cache_data'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Cache list of daily objects'),
-    '#default_value' => variable_get('islandora_onthisday_cache_data', 0),
-    '#description' => t('May improve performance on large or busy sites. Old daily caches are cleared by Drupal cron.'),
-  );
   $form['islandora_onthisday_test_dates_enable'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable adding test date in URL, e.g., /onthisday/02-26.'),
@@ -94,7 +94,7 @@ function islandora_onthisday_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Display debugging metadata'),
     '#default_value' => variable_get('islandora_onthisday_show_debugging_metadata', 0),
-    '#description' => t('Display metadata to admin users for debugging purposes.'),
+    '#description' => t('Display values of metadata fields configured above to admin users for debugging purposes.'),
   );
   return system_settings_form($form);
 }

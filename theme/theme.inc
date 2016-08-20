@@ -51,8 +51,9 @@ function islandora_onthisday_preprocess_islandora_onthisday_object(array &$varia
  */
 function islandora_onthisday_preprocess_islandora_onthisday_rss_channel(array &$variables) {
   global $base_url;
-  $variables['basee_url'] = $base_url;
+  $variables['base_url'] = $base_url;
   $variables['site_name'] = variable_get('site_name', 'Drupal');
+  $variables['site_mail'] = variable_get('site_mail', 'admin@example.com');
   $variables['today'] = date('F j');
   foreach ($variables['islandora_objects'] as &$item) {
     $islandora_object = islandora_object_load($item['pid']);
@@ -63,5 +64,20 @@ function islandora_onthisday_preprocess_islandora_onthisday_rss_channel(array &$
     }
     $item['thumb_link'] = url("$base_url/islandora/object/" . $item['pid'] . "/datastream/TN/view");
     $item['url'] = url("$base_url/islandora/object/" . $item['pid']);
+
+    $dc_xml = $islandora_object['DC']->content;
+    $dom = new DOMDocument();
+    $dom->loadXML($dc_xml);
+    $xpath = new DOMXPath($dom);
+    $xpath->registerNamespace('dc', 'http://purl.org/dc/elements/1.1/');
+    $descriptions = $xpath->query("//dc:description");
+    if ($descriptions->length > 0) {
+      $description = $descriptions->item(0)->nodeValue;
+    }
+    else {
+      $description = '[No description available]';
+    }
+
+    $item['description'] = htmlspecialchars($description);
   }
 }
