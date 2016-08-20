@@ -164,15 +164,20 @@ function islandora_onthisday_get_random_object() {
 /**
  * Clear stale days' worth of data from the cache table.
  *
- * We don't use cache_clear_all() since we don't want to
- * clear today's cache until tomorrow.
+ * @param bool $today
+ *   Whether or not to clear today's cache entry.
  */
-function islandora_onthisday_clear_cache() {
+function islandora_onthisday_clear_cache($today = FALSE) {
   if (!variable_get('islandora_onthisday_cache_data', 0)) {
     return;
   }
-  // First, get all the rows in the cache table whose cid starts with
-  // 'islandora_onthisday:'.
+  if ($today) {
+    clear_cache_all('islandora_onthisday', 'cache', TRUE);
+    return;
+  }
+
+  // If we don't want to clear today's entry, first we get all the rows
+  // in the cache table whose cid starts with 'islandora_onthisday:'.
   $result = db_query("SELECT cid FROM {cache} WHERE cid LIKE 'islandora_onthisday:%'");
   // Then, for each one other than today's, delete that row.
   $todays_cache_cid = 'islandora_onthisday:' . date("m-d");

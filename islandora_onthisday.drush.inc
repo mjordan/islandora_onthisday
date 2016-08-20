@@ -12,9 +12,9 @@ function islandora_onthisday_drush_command() {
   $items = array();
   $items['islandora_onthisday_get_objects'] = array(
     'aliases' => array('iotdgo'),
-    'description' => "Get a list of PIDs from Islandora for the objects whose date values in Solr are equal to today's date.",
+    'description' => "Generate the list of Islandora objects from Solr whose date values are equal to today's date.",
     'examples' => array(
-      'drush islandora_onthisday_get_pids',
+      'drush islandora_onthisday_get_objects',
     ),
     'options' => array(
       'date' => array(
@@ -28,6 +28,12 @@ function islandora_onthisday_drush_command() {
     'description' => "Clear out stale daily caches of 'on this day' data. Does not clear out today's cache.",
     'examples' => array(
       'drush islandora_onthisday_clear_cache',
+      'drush islandora_onthisday_clear_cache --today=true',
+    ),
+    'options' => array(
+      'today' => array(
+        'description' => "Whether or not to clear today's entries in the cache, if they exist. Default is FALSE.",
+      ),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
@@ -36,7 +42,12 @@ function islandora_onthisday_drush_command() {
 }
 
 /**
- * Queries Solr for a list of PIDs.
+ * Queries Solr for a list of objects.
+ *
+ * This module queries Solr when a user visits /onthisday. If the caching admin
+ * option is set, the query if skipped and the cached version is used. Very
+ * large Islandora sites may want to run this command using a Linux cron job
+ * to populate the cached version in advance of a user hitting /onthisday.
  */
 function drush_islandora_onthisday_get_objects() {
   if (!module_exists('islandora_solr')) {
@@ -70,9 +81,15 @@ function drush_islandora_onthisday_get_objects() {
 
 /**
  * Clears the stale data cached by this module.
+ *
+ * This module clears its cached data using Drupal cron. Large Islandora sites
+ * may want to run this command in a Linux cron job if they find that Drupal
+ * cron is timing out. This command is also useful during testing and
+ * development.
  */
 function drush_islandora_onthisday_clear_cache() {
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
-  islandora_onthisday_clear_cache();
+  $today = drush_get_option('today', FALSE);
+  islandora_onthisday_clear_cache($today);
   drush_log(dt('Islandora On This Day cache cleared.', array()), 'ok');
 }
