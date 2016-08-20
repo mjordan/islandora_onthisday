@@ -6,8 +6,8 @@ Utility module that queries Solr for objects whose date fields contain a month a
 
 It also:
 
-* provides a block that displays a random object from the list of those whose month and day match the current day's
 * provides an RSS feed at `/onthisday/rss` containing items corresponding to the current day's gallery
+* provides a block that displays a random object from the list of those whose month and day match the current day's
 
 The module lets admins configure a list of date query and sort fields in Solr, but assumes that date values are in YYYY-MM-DD format (which is a recommended format for dates in MODS, for example).
 
@@ -21,6 +21,8 @@ The module lets admins configure a list of date query and sort fields in Solr, b
 Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Once you do this, visiting `/onthisday` will display a list of objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
 
 This module also provides an "Islandora On This Day" block that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects.
+
+Admins of very large Islandora sites will want to consider using the included Drush script to generate and clear data cached by this module.
 
 ## Testing your gallery
 

@@ -45,9 +45,9 @@ function islandora_onthisday_drush_command() {
  * Queries Solr for a list of objects.
  *
  * This module queries Solr when a user visits /onthisday. If the caching admin
- * option is set, the query if skipped and the cached version is used. Very
+ * option is set, the query is skipped and the cached version is used. Very
  * large Islandora sites may want to run this command using a Linux cron job
- * to populate the cached version in advance of a user hitting /onthisday.
+ * to populate the cache in advance of a user hitting /onthisday.
  */
 function drush_islandora_onthisday_get_objects() {
   if (!module_exists('islandora_solr')) {
@@ -80,11 +80,11 @@ function drush_islandora_onthisday_get_objects() {
 }
 
 /**
- * Clears the stale data cached by this module.
+ * Clears the data cached by this module.
  *
- * This module clears its cached data using Drupal cron. Large Islandora sites
- * may want to run this command in a Linux cron job if they find that Drupal
- * cron is timing out. This command is also useful during testing and
+ * This module clears its cached data using Drupal cron. Very large Islandora
+ * sites may want to run this command in a Linux cron job if they find that
+ * Drupal cron is timing out. This command is also useful during testing and
  * development.
  */
 function drush_islandora_onthisday_clear_cache() {
