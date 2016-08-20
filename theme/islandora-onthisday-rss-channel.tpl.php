@@ -25,7 +25,7 @@
     <title><?php print $item['label']; ?></title>
   <?php endif; ?>
     <link><?php print $item['url']; ?></link>
-      <description><img src="<?php print $item['thumb_link']; ?>" title="<?php print $item['description']; ?>" alt="<?php print $item['description']; ?>" /></description>
+      <description><?php print $item['description']; ?></description>
       <author />
       <guid><?php print $item['url']; ?></guid>
       <pubDate />
