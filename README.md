@@ -1,8 +1,11 @@
 # Islandora On This Day
 
-Utility module that queries Solr for objects whose date fields contain a month and day equal to the current day's. The module:
+Utility module that queries Solr for objects whose date fields contain a month and day equal to the current day's. The module displays a gallery of thumbnails at `/onthisday` for the objects it finds in Solr:
 
-* displays a gallery of thumbnails at `/onthisday` for the objects it finds in Solr
+![Sample On This Day gallery](https://dl.dropboxusercontent.com/u/1015702/linked_to/onthisday.png)
+
+It also:
+
 * provides a block that displays a random object from the list of those whose month and day match the current day's
 * provides an RSS feed at `/onthisday/rss` containing items corresponding to the current day's gallery
 
