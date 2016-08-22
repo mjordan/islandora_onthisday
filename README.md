@@ -38,10 +38,10 @@ Pull requests are welcome, as are use cases and suggestions.
 
 ## Planned Development
 
-The module is still in relatively early development and testing. Here are some features that are planned:
+Some features that are planned include:
 
-* Provide a way for admins to exclude specific collections, content models, and namespaces from the list of daily objects.
-* Add some config options for the RSS feed.
+* A way for admins to exclude specific collections, content models, and namespaces from the list of daily objects.
+* Some config options for the RSS feed, e.g. language, copyright, managing editor values.
 
 ## License
 
