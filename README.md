@@ -40,7 +40,6 @@ Pull requests are welcome, as are use cases and suggestions.
 
 Some features that are planned include:
 
-* A way for admins to exclude specific collections, content models, and namespaces from the list of daily objects.
 * Some config options for the RSS feed, e.g. language, copyright, managing editor values.
 
 ## License
