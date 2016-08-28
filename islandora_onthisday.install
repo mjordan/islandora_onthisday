@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * This file contains all install related hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_onthisday_uninstall() {
+  $variables = array(
+    'islandora_onthisday_date_fields',
+    'islandora_onthisday_sort_field',
+    'islandora_onthisday_filter_queries',
+    'islandora_onthisday_header',
+    'islandora_onthisday_show_collections',
+    'islandora_onthisday_cache_data',
+    'islandora_onthisday_max_objects',
+    'islandora_onthisday_test_dates_enable',
+    'islandora_onthisday_show_debugging_metadata',
+  );
+  array_walk($variables, 'variable_del');
+}
