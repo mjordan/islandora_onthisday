@@ -15,6 +15,7 @@
   <p class="no-results"><?php print t('Sorry, there are no objects with a date that is "on this day".'); ?></p>
 <?php else: ?>
   <div class="islandora-basic-collection-grid clearfix">
+  <div class="islandora-onthisday-header"><?php print filter_xss($header); ?></div>
   <?php foreach($islandora_objects as $item): ?>
     <dl class="islandora-basic-collection-object">
         <dt class="islandora-basic-collection-thumb"><a href="<?php print filter_xss($item['title_link']); ?>"><img src="<?php print $item['thumb_link']; ?>" /></a></dt>
