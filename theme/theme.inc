@@ -51,10 +51,12 @@ function islandora_onthisday_preprocess_islandora_onthisday_object(array &$varia
  */
 function islandora_onthisday_preprocess_islandora_onthisday_rss_channel(array &$variables) {
   global $base_url;
+  global $language;
   $variables['base_url'] = $base_url;
   $variables['site_name'] = variable_get('site_name', 'Drupal');
   $variables['site_mail'] = variable_get('site_mail', 'admin@example.com');
   $variables['today'] = date('F j');
+  $variables['language'] = $language->language;
   foreach ($variables['islandora_objects'] as &$item) {
     $islandora_object = islandora_object_load($item['pid']);
     if ($islandora_object['TN']) {

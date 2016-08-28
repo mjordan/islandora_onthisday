@@ -14,7 +14,7 @@
   <title><?php print $site_name; ?></title>
   <link><?php print $base_url; ?>/onthisday</link>
   <description>On this day, <?php print $today; ?></description>
-  <language>en</language>
+  <language><?php print $language; ?></language>
   <copyright />
   <managingEditor />
   <webMaster><?php print $site_mail; ?></webMaster>
