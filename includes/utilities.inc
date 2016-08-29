@@ -232,8 +232,8 @@ function islandora_onthisday_get_collection_labels($doc) {
     $query_processor->solrParams['fl'] = 'PID,fgs_label_s';
     $query_processor->executeQuery();
     if (!empty($query_processor->islandoraSolrResult) && !empty($query_processor->islandoraSolrResult['response']['objects'])) {
-      $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['object_label']) ?
-        $query_processor->islandoraSolrResult['response']['objects'][0]['object_label'] : '');
+      $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['solr_doc']['fgs_label_s']) ?
+        $query_processor->islandoraSolrResult['response']['objects'][0]['solr_doc']['fgs_label_s'] : '');
       $collection_labels[$pid] = $label;
     }
   }
