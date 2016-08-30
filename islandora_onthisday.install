@@ -15,6 +15,7 @@ function islandora_onthisday_uninstall() {
     'islandora_onthisday_filter_queries',
     'islandora_onthisday_header',
     'islandora_onthisday_show_collections',
+    'islandora_onthisday_exclude_collections',
     'islandora_onthisday_cache_data',
     'islandora_onthisday_max_objects',
     'islandora_onthisday_test_dates_enable',

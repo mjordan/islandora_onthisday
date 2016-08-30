@@ -76,7 +76,7 @@ function islandora_onthisday_query_solr($query) {
   $query_processor = new IslandoraSolrQueryProcessor();
   $query_processor->solrQuery = $query;
 
-  $fields_to_return = 'PID,fgs_label_s';
+  $fields_to_return = 'PID,fgs_label_s,ancestors_mt';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
 
@@ -217,6 +217,10 @@ function islandora_onthisday_clear_cache($today = FALSE) {
  */
 function islandora_onthisday_get_collection_labels($doc) {
   $collection_labels = array();
+  if (!variable_get('islandora_onthisday_show_collections', 0)) {
+    return $collection_labels;
+  }
+
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
 
   // If the solr document for the object doesn't contain the
@@ -225,11 +229,22 @@ function islandora_onthisday_get_collection_labels($doc) {
     return array();
   }
 
-  foreach ($doc[$collection_field] as $pid) {
+  // Support DGI's Solr config's ancestor indexing.
+  if (isset($doc['ancestors_mt'])) {
+    $collections = $doc['ancestors_mt'];
+    $collections_to_exclude = explode(',', variable_get('islandora_onthisday_exclude_collections', 'islandora:root'));
+    $collections = array_diff($collections, $collections_to_exclude);
+  }
+  else {
+    // If no ancestor indexing, use configured collection field.
+    $collections = $doc[$collection_field];
+  }
+
+  foreach ($collections as $pid) {
     $pid = str_replace('info:fedora/', '', $pid);
     $pid = preg_replace('/:/', '\\:', $pid);
     $query_processor = new IslandoraSolrQueryProcessor();
-    $query_processor->buildQuery("PID:\"$pid\"");
+    $query_processor->buildQuery("PID:\"$pid\" AND RELS_EXT_hasModel_uri_mt:info\:fedora/islandora\:collectionCModel");
     $query_processor->executeQuery();
     if (!empty($query_processor->islandoraSolrResult) && !empty($query_processor->islandoraSolrResult['response']['objects'])) {
       $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['object_label']) ?
