@@ -47,7 +47,9 @@ function islandora_onthisday_drush_command() {
  * This module queries Solr when a user visits /onthisday. If the caching admin
  * option is set, the query is skipped and the cached version is used. Very
  * large Islandora sites may want to run this command using a Linux cron job
- * to populate the cache in advance of a user hitting /onthisday.
+ * to populate the cache in advance of a user hitting /onthisday. Note that if
+ * you have enabled Drupal's built-in "Cache pages for anonymous users" option,
+ * you probably don't need to use this module's caching.
  */
 function drush_islandora_onthisday_get_objects() {
   if (!module_exists('islandora_solr')) {

@@ -75,19 +75,19 @@ function islandora_onthisday_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Display collection links'),
     '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
-    '#description' => t('Display links to collections object is in.'),
-  );
-  $form['islandora_onthisday_cache_data'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Cache list of daily objects'),
-    '#default_value' => variable_get('islandora_onthisday_cache_data', 0),
-    '#description' => t('May improve performance on large or busy sites. Old daily caches are cleared by Drupal cron.'),
+    '#description' => t('Display links to collections object is in. Note: page objects and children of compound objects generally do not contain collection data.'),
   );
   $form['islandora_onthisday_set_limit'] = array(
     '#type' => 'checkbox',
     '#title' => t('Limit number of objects in gallery'),
     '#default_value' => variable_get('islandora_onthisday_set_limit', 0),
     '#description' => t('Limit the number of objects in the "On this day" gallery.'),
+  );
+  $form['islandora_onthisday_cache_data'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Cache list of daily objects'),
+    '#default_value' => variable_get('islandora_onthisday_cache_data', 0),
+    '#description' => t("May improve performance on large or busy sites, and sites that do not use Drupal's page caching."),
   );
   $form['islandora_onthisday_max_objects'] = array(
     '#title' => t('Maximum number of objects to show'),
@@ -104,7 +104,7 @@ function islandora_onthisday_admin_settings() {
   );
   $form['islandora_onthisday_test_dates_enable'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable adding test date in URL, e.g., /onthisday/02-26.'),
+    '#title' => t('Enable adding test date in URL, e.g., /onthisday/02-26'),
     '#default_value' => variable_get('islandora_onthisday_test_dates_enable', 0),
     '#description' => t('For testing purposes only; disable in production. Test date must be in mm-dd format. Does not work if caching is enabled.'),
   );
