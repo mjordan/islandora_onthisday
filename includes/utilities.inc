@@ -227,14 +227,15 @@ function islandora_onthisday_get_collection_labels($doc) {
 
   foreach ($doc[$collection_field] as $pid) {
     $pid = str_replace('info:fedora/', '', $pid);
+    $pid = preg_replace('/:/', '\\:', $pid);
     $query_processor = new IslandoraSolrQueryProcessor();
     $query_processor->buildQuery("PID:\"$pid\"");
-    $query_processor->solrParams['fl'] = 'PID,fgs_label_s';
     $query_processor->executeQuery();
     if (!empty($query_processor->islandoraSolrResult) && !empty($query_processor->islandoraSolrResult['response']['objects'])) {
-      $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['solr_doc']['fgs_label_s']) ?
-        $query_processor->islandoraSolrResult['response']['objects'][0]['solr_doc']['fgs_label_s'] : '');
-      $collection_labels[$pid] = $label;
+      $label = (!empty($query_processor->islandoraSolrResult['response']['objects'][0]['object_label']) ?
+        $query_processor->islandoraSolrResult['response']['objects'][0]['object_label'] : '');
+      $clean_pid = preg_replace('/\\\/', '', $pid);
+      $collection_labels[$clean_pid] = $label;
     }
   }
   return $collection_labels;
