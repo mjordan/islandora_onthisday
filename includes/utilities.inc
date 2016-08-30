@@ -94,8 +94,8 @@ function islandora_onthisday_query_solr($query) {
   $query_processor->solrParams['sort'] = $sort_field;
   $query_processor->solrLimit = '1000000';
 
+  $filters = array();
   if (strlen(variable_get('islandora_onthisday_filter_queries', ''))) {
-    $filters = array();
     $filter_queries = preg_split("/\\r\\n|\\r|\\n/", variable_get('islandora_onthisday_filter_queries', ''));
     foreach ($filter_queries as &$filter) {
       $filter = trim($filter);
