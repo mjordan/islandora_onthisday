@@ -36,12 +36,6 @@ You can test your gallery by appending a test month and day to the end of `/onth
 
 Pull requests are welcome, as are use cases and suggestions.
 
-## Planned Development
-
-Some features that are planned include:
-
-* Some config options for the RSS feed, e.g. language, copyright, managing editor values.
-
 ## License
 
  [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
