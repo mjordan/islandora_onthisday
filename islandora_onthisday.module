@@ -59,11 +59,17 @@ function islandora_onthisday_admin_settings() {
     '#default_value' => variable_get('islandora_onthisday_filter_queries', ''),
     '#description' => t('Solr queries that filter out objects from the daily list. For example, "PID:foo\:*" will filter out all objects with the namespace "foo"; "RELS_EXT_isMemberOfCollection_uri_ss:info\:fedora/islandora\:sp_basic_image_collection" will filter out all objects in the Basic Image collection; "RELS_EXT_isPageOf_uri_ms:*" will filter out all book and newspaper page objects. Enter one query per line. Queries will be "OR"ed together.'),
   );
+  if (module_exists('token')) {
+    $header_description = t('Header for /onthisday. HTML markup and !tokens are allowed.', array('!tokens' => l(t('tokens'), '/admin/help/token')));
+  }
+  else {
+    $header_description = t('Header for /onthisday. HTML markup is allowed.');
+  }
   $form['islandora_onthisday_header'] = array(
     '#title' => t('Gallery header'),
     '#type' => 'textarea',
     '#default_value' => variable_get('islandora_onthisday_header', ''),
-    '#description' => t('Header for /onthisday. HTML markup is allowed.'),
+    '#description' => $header_description,
   );
   $form['islandora_onthisday_show_collections'] = array(
     '#type' => 'checkbox',

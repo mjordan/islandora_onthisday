@@ -15,7 +15,7 @@ function islandora_onthisday_preprocess_islandora_onthisday_gallery(array &$vari
   $path = drupal_get_path('module', 'islandora_solr_config');
   $variables['rss_icon_path'] = $path . '/images/rss.png';
   $variables['rss_icon_alt'] = t("RSS feed");
-  $variables['header'] = variable_get('islandora_onthisday_header', '');
+  $variables['header'] = token_replace(variable_get('islandora_onthisday_header', ''));
 
   foreach ($variables['islandora_objects'] as &$object) {
     $object['thumb_link'] = url("islandora/object/" . $object['pid'] . "/datastream/TN/view");
