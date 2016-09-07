@@ -181,12 +181,13 @@ function islandora_onthisday_block_view($delta = '') {
     case 'islandora_onthisday_random':
       module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
       if ($object = islandora_onthisday_get_random_object()) {
+        drupal_add_css(drupal_get_path('module', 'islandora_onthisday') . '/css/islandora_onthisday.css');
         $more_url = url("/onthisday");
-        $more_markup = ' <span id="islandora-onthisday-random-more"><a href="' . $more_url . '">' . t('More...') . '</a></span>';
-        $block['subject'] = t('On This Day') . $more_markup;
+        $more_markup = ' <span id="islandora-onthisday-random-more"><a href="' . $more_url . '">' . t('(See more)') . '</a></span>';
+        $block['subject'] = t('On This Day');
         $block['content'] = array(
-          '#markup' => theme('islandora_onthisday_object',
-            array('islandora_object' => $object)));
+          '#markup' => '<div id="islandora-onthisday-random">' . theme('islandora_onthisday_object',
+            array('islandora_object' => $object)) . '</div>' . $more_markup);
       }
       else {
         return FALSE;
