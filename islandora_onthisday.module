@@ -73,9 +73,9 @@ function islandora_onthisday_admin_settings() {
   );
   $form['islandora_onthisday_show_collections'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Display collection links'),
+    '#title' => t('Display collection links in gallery'),
     '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
-    '#description' => t('Display links to collections object is in. Note: collection membership for page objects and children of compound objects will only appear if it is indexed in Solr\'s "ancestors_mt" field.'),
+    '#description' => t('Display links to collections object is in. Note: collection membership for page objects and children of compound objects will only appear if it is indexed in Solr\'s "ancestors_mt" field. To display collection links in the On This Day block, see its configuration form.'),
   );
   $form['islandora_onthisday_exclude_collections'] = array(
     '#title' => t('Collections to exclude'),
@@ -144,6 +144,11 @@ function islandora_onthisday_theme() {
       'file' => 'theme/theme.inc',
       'variables' => array('islandora_object' => NULL),
     ),
+    'islandora_onthisday_collection_links' => array(
+      'template' => 'theme/islandora-onthisday-collection-links',
+      'file' => 'theme/theme.inc',
+      'variables' => array('islandora_object' => NULL),
+    ),
     'islandora_onthisday_rss_channel' => array(
       'template' => 'theme/islandora-onthisday-rss-channel',
       'file' => 'theme/theme.inc',
@@ -182,6 +187,12 @@ function islandora_onthisday_block_view($delta = '') {
       module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
       if ($object = islandora_onthisday_get_random_object()) {
         drupal_add_css(drupal_get_path('module', 'islandora_onthisday') . '/css/islandora_onthisday.css');
+
+        $links_markup = '';
+        if (variable_get('islandora_onthisday_show_collections_in_block', 0)) {
+          $links_markup = theme('islandora_onthisday_collection_links', array('islandora_object' => $object));
+        }
+
         $more_url = url("/onthisday");
         if (variable_get('islandora_onthisday_see_more_link', 0)) {
           $more_markup = ' <span id="islandora-onthisday-random-more"><a href="' . $more_url . '">' . t('(See more)') . '</a></span>';
@@ -189,10 +200,11 @@ function islandora_onthisday_block_view($delta = '') {
         else {
           $more_markup = '';
         }
+
         $block['subject'] = t('On This Day');
         $block['content'] = array(
           '#markup' => '<div id="islandora-onthisday-random">' . theme('islandora_onthisday_object',
-            array('islandora_object' => $object)) . '</div>' . $more_markup);
+            array('islandora_object' => $object)) . '</div>' . $links_markup . $more_markup);
       }
       else {
         return FALSE;
@@ -209,9 +221,15 @@ function islandora_onthisday_block_configure($delta) {
   $form = array();
   switch ($delta) {
     case 'islandora_onthisday_random':
+      $form['islandora_onthisday_show_collections_in_block'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Display collection links in block'),
+        '#description' => t('Include links to the collection(s) the object is in. See the main On This Day options form for more info.'),
+        '#default_value' => variable_get('islandora_onthisday_show_collections_in_block', 0),
+      );
       $form['islandora_onthisday_see_more_link'] = array(
         '#type' => 'checkbox',
-        '#title' => t('Show "See more" link'),
+        '#title' => t('Display "See more" link'),
         '#description' => t('Include the "See more" link to /onthisday.'),
         '#default_value' => variable_get('islandora_onthisday_see_more_link', 0),
       );
@@ -227,6 +245,7 @@ function islandora_onthisday_block_save($delta = '', $edit = array()) {
   switch ($delta) {
     case 'islandora_onthisday_random':
       variable_set('islandora_onthisday_see_more_link', $edit['islandora_onthisday_see_more_link']);
+      variable_set('islandora_onthisday_show_collections_in_block', $edit['islandora_onthisday_show_collections_in_block']);
       break;
   }
 }

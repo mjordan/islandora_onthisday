@@ -38,6 +38,15 @@ function islandora_onthisday_preprocess_islandora_onthisday_object(array &$varia
     $variables['islandora_object']['pid'] . "/datastream/TN/view");
   $variables['islandora_object']['title_link'] = url("islandora/object/" .
     $variables['islandora_object']['pid']);
+}
+
+/**
+ * Default template: islandora-onthisday-collection-links.tpl.php.
+ *
+ * @param array $variables
+ *   The variables passed in from the theming layer.
+ */
+function islandora_onthisday_preprocess_islandora_onthisday_collection_links(array &$variables) {
   $variables['islandora_object']['collections_label'] = (count($variables['islandora_object']['collections']) > 1) ? t('Collections') : t('Collection');
   if (!variable_get('islandora_onthisday_show_collections', 0)) {
     $variables['islandora_object']['collections'] = array();
