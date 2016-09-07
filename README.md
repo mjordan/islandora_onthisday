@@ -20,7 +20,7 @@ The module lets admins configure a list of date query and sort fields in Solr, b
 
 Enable this module as you would any other, and configure it at `admin/islandora/tools/onthisday`. Once you do this, visiting `/onthisday` will display a list of objects indexed in Solr that have date information containing the current month and day; the year component of the date will be displayed at the end of each object's title.
 
-This module also provides an "Islandora On This Day" block that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects.
+This module also provides an "Islandora On This Day" block that will show one randomly selected object that has the current month/day. The block will not appear if there are no matching objects. The block has its own options for showing collection links and a "See more" link to the gallery.
 
 Admins of very large Islandora sites will want to consider using the included Drush script to generate and clear data cached by this module.
 
