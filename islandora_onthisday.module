@@ -30,6 +30,11 @@ function islandora_onthisday_menu() {
     'access arguments' => array(ISLANDORA_VIEW_OBJECTS),
     'type' => MENU_CALLBACK,
   );
+  $items['onthisday/json'] = array(
+    'page callback' => 'islandora_onthisday_json',
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 
@@ -275,6 +280,16 @@ function islandora_onthisday_rss_channel() {
   $objects = islandora_onthisday_get_objects();
   $output = theme('islandora_onthisday_rss_channel', array('islandora_objects' => $objects));
   return $output;
+}
+
+/**
+ * Menu callback.
+ */
+function islandora_onthisday_json() {
+  module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
+  $objects = islandora_onthisday_get_objects();
+  drupal_json_output($objects);
+  exit();
 }
 
 /**
