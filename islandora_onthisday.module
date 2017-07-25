@@ -94,6 +94,15 @@ function islandora_onthisday_admin_settings() {
       ),
     ),
   );
+
+  $form['islandora_onthisday_exclude_cmodels'] = array(
+    '#title' => t('Content models to exclude'),
+    '#type' => 'textfield',
+    '#size' => 160,
+    '#default_value' => variable_get('islandora_onthisday_exclude_cmodels', 'islandora:newspaperPageCModel,islandora:pageCModel'),
+    '#description' => t('Comma-separated list of PIDs for content models to exclude. No spaces. See <a href="https://wiki.duraspace.org/display/ISLANDORA/Solution+Packs#SolutionPacks-SolutionPacksandContentModels" target="_blank">the Islandora Wiki</a> for a list of PIDs.'),
+  );
+
   $form['islandora_onthisday_set_limit'] = array(
     '#type' => 'checkbox',
     '#title' => t('Limit number of objects in gallery'),

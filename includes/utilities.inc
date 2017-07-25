@@ -76,7 +76,7 @@ function islandora_onthisday_query_solr($query) {
   $query_processor = new IslandoraSolrQueryProcessor();
   $query_processor->solrQuery = $query;
 
-  $fields_to_return = 'PID,fgs_label_s,ancestors_mt';
+  $fields_to_return = 'PID,fgs_label_s,ancestors_mt,RELS_EXT_hasModel_uri_mt';
   $fields_to_return .= ',' . variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt');
   $collection_field = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
 
@@ -103,6 +103,17 @@ function islandora_onthisday_query_solr($query) {
       $filters[] = $filter;
     }
   }
+
+//  Add excluded CModels to Filter list.
+  $excluded_cmodels = array();
+  $excluded_cmodels = explode(",", variable_get('islandora_onthisday_exclude_cmodels', 'islandora:newspaperPageCModel,islandora:pageCModel'));
+
+  foreach ($excluded_cmodels as $excluded_cmodel) {
+   $excluded_cmodel = str_replace(":", "\:", $excluded_cmodel);
+   $filter = '-' . 'RELS_EXT_hasModel_uri_mt:info\:fedora/' . $excluded_cmodel;
+   $filters[] = $filter;
+  }
+
   if (count($filters)) {
     $query_processor->solrParams['fq'] = implode(' OR ', $filters);
   }
@@ -111,6 +122,7 @@ function islandora_onthisday_query_solr($query) {
   if ($query_processor->islandoraSolrResult['response']['numFound'] > 0) {
     $date_fields = explode(',', variable_get('islandora_onthisday_date_fields', 'mods_originInfo_dateIssued_mdt,mods_originInfo_dateCreated_mdt'));
     foreach ($query_processor->islandoraSolrResult['response']['objects'] as $object) {
+
       $pid = $object['solr_doc']['PID'];
 
       // Get a year to display. Ugly.
