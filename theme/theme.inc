@@ -13,7 +13,7 @@
  */
 function islandora_onthisday_preprocess_islandora_onthisday_gallery(array &$variables) {
   $path = drupal_get_path('module', 'islandora_solr_config');
-  $variables['rss_icon_path'] = $path . '/images/rss.png';
+  $variables['rss_icon_path'] = '../' . $path . '/images/rss.png';
   $variables['rss_icon_alt'] = t("RSS feed");
   $variables['header'] = token_replace(variable_get('islandora_onthisday_header', ''));
 
