@@ -2,7 +2,7 @@
 
 Utility module that queries Solr for objects whose date fields contain a month and day equal to the current day's. The module displays a gallery of thumbnails at `/onthisday` for the objects it finds in Solr:
 
-![Sample On This Day gallery](https://dl.dropboxusercontent.com/u/1015702/linked_to/onthisday.png)
+![Sample On This Day gallery](images/onthisday_gallery.png)
 
 It also:
 
