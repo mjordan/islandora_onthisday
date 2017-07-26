@@ -9,7 +9,6 @@
 ?>
 
 <a href="/onthisday/rss"><img src="<?php print $rss_icon_path; ?>" class="secondary-display-rss" alt="<?php print $rss_icon_alt; ?>"></a>
-
 <div class="islandora islandora-onthisday-grid">
 <?php if (!count($islandora_objects)): ?>
   <p class="no-results"><?php print t('Sorry, there are no objects with a date that is "on this day".'); ?></p>
