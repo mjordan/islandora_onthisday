@@ -42,6 +42,8 @@ function islandora_onthisday_get_objects($date = FALSE) {
     $query = $query_parts[0];
   }
 
+  dd($query);
+
   // Get the object data from the Solr query.
   $objects = islandora_onthisday_query_solr($query);
 

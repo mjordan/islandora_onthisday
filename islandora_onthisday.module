@@ -261,8 +261,13 @@ function islandora_onthisday_block_save($delta = '', $edit = array()) {
  * Menu callback.
  */
 function islandora_onthisday_gallery($test_date = FALSE) {
-  $today = date('F j');
-  drupal_set_title("On this day, $today");
+  if ($test_date && variable_get('islandora_onthisday_test_dates_enable', 0)) {
+    $date = $test_date;
+  }
+  else {
+    $date = date('F j');
+  }
+  drupal_set_title("On this day, $date");
   module_load_include('inc', 'islandora_onthisday', 'includes/utilities');
   if (variable_get('islandora_onthisday_test_dates_enable', 0)) {
     $objects = islandora_onthisday_get_objects($test_date);
