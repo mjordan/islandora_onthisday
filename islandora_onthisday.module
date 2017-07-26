@@ -70,6 +70,20 @@ function islandora_onthisday_admin_settings() {
   else {
     $header_description = t('Header for /onthisday. HTML markup is allowed.');
   }
+  $form['islandora_onthisday_exclude_collections'] = array(
+    '#title' => t('Collections to exclude'),
+    '#type' => 'textfield',
+    '#size' => 160,
+    '#default_value' => variable_get('islandora_onthisday_exclude_collections', 'islandora:root'),
+    '#description' => t('Comma-separated list of PIDs for collections to exclude.'),
+  );
+  $form['islandora_onthisday_exclude_cmodels'] = array(
+    '#title' => t('Content models to exclude'),
+    '#type' => 'textfield',
+    '#size' => 160,
+    '#default_value' => variable_get('islandora_onthisday_exclude_cmodels', 'islandora:newspaperPageCModel,islandora:pageCModel'),
+    '#description' => t('Comma-separated list of PIDs for content models to exclude. No spaces. See <a href="https://wiki.duraspace.org/display/ISLANDORA/Solution+Packs#SolutionPacks-SolutionPacksandContentModels" target="_blank">the Islandora Wiki</a> for a list of PIDs.'),
+  );
   $form['islandora_onthisday_header'] = array(
     '#title' => t('Gallery header'),
     '#type' => 'textarea',
@@ -82,27 +96,6 @@ function islandora_onthisday_admin_settings() {
     '#default_value' => variable_get('islandora_onthisday_show_collections', 0),
     '#description' => t('Display links to collections object is in. Note: collection membership for page objects and children of compound objects will only appear if it is indexed in Solr\'s "ancestors_mt" field. To display collection links in the On This Day block, see its configuration form.'),
   );
-  $form['islandora_onthisday_exclude_collections'] = array(
-    '#title' => t('Collections to exclude'),
-    '#type' => 'textfield',
-    '#size' => 160,
-    '#default_value' => variable_get('islandora_onthisday_exclude_collections', 'islandora:root'),
-    '#description' => t('Comma-separated list of PIDs for collections to exclude.'),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="islandora_onthisday_show_collections"]' => array('checked' => TRUE),
-      ),
-    ),
-  );
-
-  $form['islandora_onthisday_exclude_cmodels'] = array(
-    '#title' => t('Content models to exclude'),
-    '#type' => 'textfield',
-    '#size' => 160,
-    '#default_value' => variable_get('islandora_onthisday_exclude_cmodels', 'islandora:newspaperPageCModel,islandora:pageCModel'),
-    '#description' => t('Comma-separated list of PIDs for content models to exclude. No spaces. See <a href="https://wiki.duraspace.org/display/ISLANDORA/Solution+Packs#SolutionPacks-SolutionPacksandContentModels" target="_blank">the Islandora Wiki</a> for a list of PIDs.'),
-  );
-
   $form['islandora_onthisday_set_limit'] = array(
     '#type' => 'checkbox',
     '#title' => t('Limit number of objects in gallery'),
