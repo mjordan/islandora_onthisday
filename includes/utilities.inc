@@ -58,8 +58,15 @@ function islandora_onthisday_get_objects($date = FALSE) {
       cache_set($todays_cache_cid, $objects, 'cache', CACHE_PERMANENT);
     }
   }
-
-  return $objects;
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  $valid_objects = array();
+  foreach ($objects as $object) {
+    $pid = $object['pid'];
+    if (islandora_namespace_accessible($pid)) {
+      $valid_objects[] = $object; 
+    }
+  } 
+  return $valid_objects;
 }
 
 /**
