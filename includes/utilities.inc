@@ -61,8 +61,7 @@ function islandora_onthisday_get_objects($date = FALSE) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   $valid_objects = array();
   foreach ($objects as $object) {
-    $pid = $object['pid'];
-    if (islandora_namespace_accessible($pid)) {
+    if (islandora_namespace_accessible($object['pid'])) {
       $valid_objects[] = $object; 
     }
   } 
